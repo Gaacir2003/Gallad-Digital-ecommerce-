@@ -5,11 +5,11 @@ import { AuthProvider } from "./context/AuthContext";
 
 
 
-import SignInPage from "./pages/SignInPage";
-import SignUpPage from "./pages/SignUpPage";
-import ProfilePage from "./pages/ProfilePage";
-import ContactPage from "./pages/ContactPage";
-import AboutPage from "./pages/AboutPage";
+import SignInPage from "./Pages/SignInPage";
+import SignUpPage from "./Pages/SignUpPage";
+import ProfilePage from "./Pages/ProfilePage";
+import ContactPage from "./Pages/ContactPage";
+import AboutPage from "./Pages/AboutPage";
 import Footer from "./Components/Footer";
 import ProductsPage from "./Pages/ProductsPage";
 import { ToastContainer } from 'react-toastify';
