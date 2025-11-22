@@ -2,9 +2,8 @@ import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router";
 import { AuthProvider } from "./context/AuthContext";
 
-import NavBar from "./components/NavBar";
-import HomePage from "./pages/HomePage";
-import ProductDetails from "./pages/ProductDetails";
+
+
 import CartPage from "./pages/CartPage";
 import SignInPage from "./pages/SignInPage";
 import SignUpPage from "./pages/SignUpPage";
@@ -16,6 +15,8 @@ import ProductsPage from "./Pages/ProductsPage";
 import { ToastContainer } from 'react-toastify';
 import { CartProvider } from "./context/cartContext";
 import ProtectedRoute from "./Components/ProtectedRoute";
+import NavBar from "./Components/NavBar";
+import HomePage from "./Pages/HomePage";
 
 
 function App() {
@@ -47,10 +48,6 @@ function App() {
               </ProtectedRoute>
             }
           />
-
-          
-          <Route path="/product" element={<ProductDetails/>} />
-         
           <Route path="/signin" element={<SignInPage />} />
           <Route path="/signup" element={<SignUpPage />} />
          

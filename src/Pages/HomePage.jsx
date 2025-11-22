@@ -6,7 +6,7 @@ import mackbook from "../assets/mackbook.png";
 import Tv from "../assets/Tv.png";
 import { FaArrowRight } from "react-icons/fa";
 import { useCart } from "../context/cartContext";
-import { products } from "../data/productsData";
+import { products } from "../Data/productsData";
 
 
 

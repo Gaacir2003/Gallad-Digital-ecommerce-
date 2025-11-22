@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { FaStar } from "react-icons/fa";
-import { products as allProducts } from "../data/productsData";
+import { products as allProducts } from "../Data/productsData";
 import { useCart } from "../context/cartContext";
 
 
