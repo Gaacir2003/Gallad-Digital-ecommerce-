@@ -4,7 +4,7 @@ import { AuthProvider } from "./context/AuthContext";
 
 
 
-import CartPage from "./pages/CartPage";
+
 import SignInPage from "./pages/SignInPage";
 import SignUpPage from "./pages/SignUpPage";
 import ProfilePage from "./pages/ProfilePage";
@@ -17,6 +17,7 @@ import { CartProvider } from "./context/cartContext";
 import ProtectedRoute from "./Components/ProtectedRoute";
 import NavBar from "./Components/NavBar";
 import HomePage from "./Pages/HomePage";
+import CartPage from './Pages/CartPage'
 
 
 function App() {
