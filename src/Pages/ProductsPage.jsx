@@ -2,13 +2,29 @@ import React, { useState } from "react";
 import { FaStar } from "react-icons/fa";
 import { products as allProducts } from "../Data/productsData";
 import { useCart } from "../context/cartContext";
-
-
+import { useAuth } from "../context/AuthContext";
+import { toast } from "react-toastify";
 
 export default function Products() {
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("All");
   const [sort, setSort] = useState("");
+
+  const { addToCart } = useCart();
+  const { user } = useAuth(); // ✅ USER CHECK ADDED
+
+  // -----------------------------------------
+  // Add to cart with sign-in check
+  // -----------------------------------------
+  const handleAddToCart = (product) => {
+    if (!user) {
+      toast.warning("Please sign in first"); // ⛔ stop here
+      return;
+    }
+
+    addToCart(product);
+    toast.success(`🛒 ${product.name} added to cart!`);
+  };
 
   // Filtering
   const filteredProducts = allProducts
@@ -19,14 +35,12 @@ export default function Products() {
       if (sort === "high") return b.price - a.price;
       return 0;
     });
-    const { addToCart } = useCart();
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-10">
       <h1 className="text-3xl font-bold mb-8 text-orange-700">Our Products</h1>
 
       <div className="flex gap-10">
-        
         {/* Left Side */}
         <div className="w-1/4 hidden md:block">
           <h2 className="text-xl font-semibold mb-4">Categories</h2>
@@ -48,7 +62,7 @@ export default function Products() {
         {/* Products Content */}
         <div className="w-full md:w-3/4">
 
-          {/* Search + Sort Controls */}
+          {/* Search + Sort */}
           <div className="flex flex-col md:flex-row justify-between mb-6 gap-4">
             <input
               type="text"
@@ -68,7 +82,7 @@ export default function Products() {
             </select>
           </div>
 
-          {/* Products Grid Section */}
+          {/* Products Grid */}
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
             {filteredProducts.map((p) => (
               <div
@@ -80,12 +94,12 @@ export default function Products() {
                   -{p.discount}%
                 </span>
 
-                {/* Category Tag */}
+                {/* Category */}
                 <span className="absolute top-3 right-3 bg-orange-600 text-white text-xs px-2 py-1 rounded shadow">
                   {p.category}
                 </span>
 
-                {/* Product Image */}
+                {/* Image */}
                 <img
                   src={p.image}
                   alt={p.name}
@@ -95,16 +109,13 @@ export default function Products() {
                 {/* Title */}
                 <h2 className="mt-4 text-lg font-semibold">{p.name}</h2>
 
-            
-
-                {/* Price */}
+                {/* Prices */}
                 <div className="flex items-center gap-3 mt-2">
                   <p className="text-orange-700 font-bold text-xl">${p.price}</p>
-                  <p className="line-through text-gray-400 text-md">
-                    ${p.oldPrice}
-                  </p>
+                  <p className="line-through text-gray-400 text-md">${p.oldPrice}</p>
                 </div>
-                    {/* Rating */}
+
+                {/* Rating */}
                 <div className="flex items-center text-yellow-500 mt-1">
                   {[1, 2, 3, 4, 5].map((num) => (
                     <FaStar
@@ -120,10 +131,12 @@ export default function Products() {
                     {p.rating.toFixed(1)}
                   </span>
                 </div>
-                
 
                 {/* Button */}
-                <button onClick={() => addToCart(p)} className="w-full mt-4 bg-orange-700 text-white py-2 rounded-md hover:bg-orange-800 transition cursor-pointer">
+                <button
+                  onClick={() => handleAddToCart(p)}
+                  className="w-full mt-4 bg-orange-700 text-white py-2 rounded-md hover:bg-orange-800 transition cursor-pointer"
+                >
                   Add to Cart
                 </button>
 

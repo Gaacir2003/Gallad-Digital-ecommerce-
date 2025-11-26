@@ -1,6 +1,7 @@
 import { createContext, useContext, useState, useEffect } from "react";
 import { supabase } from "../Lib/supabaseClient";
 import { useAuth } from "./AuthContext";
+import { toast } from "react-toastify";
 
 const CartContext = createContext();
 
@@ -13,7 +14,6 @@ export const CartProvider = ({ children }) => {
     else setCart([]);
   }, [user]);
 
-  
   const fetchCart = async () => {
     if (!user) return;
 
@@ -24,6 +24,7 @@ export const CartProvider = ({ children }) => {
 
     if (error) {
       console.error("Error fetching cart:", error);
+      toast.error("Failed to load your cart");
       return;
     }
 
@@ -32,7 +33,7 @@ export const CartProvider = ({ children }) => {
 
   const addToCart = async (product) => {
     if (!user) {
-      alert("Please sign in first");
+      toast.warning("Please sign in first");
       return;
     }
 
@@ -49,16 +50,16 @@ export const CartProvider = ({ children }) => {
           quantity: 1,
         },
       ])
-      .select(); 
+      .select();
 
     if (error) {
       console.error("Add to cart error:", error);
-      alert("Failed to add to cart");
+      toast.error("Failed to add item to cart");
       return;
     }
 
-    
     setCart((prev) => [...prev, data[0]]);
+    toast.success("Item added to cart!");
   };
 
   return (

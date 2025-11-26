@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { supabase } from "../Lib/supabaseClient";
 import { FaCamera } from "react-icons/fa";
+import { toast } from "react-toastify";
 
 export default function ProfilePage() {
   const [user, setUser] = useState(null);
@@ -20,7 +21,6 @@ export default function ProfilePage() {
 
     setUser(user);
 
-    // Fetch profile image
     if (user.user_metadata?.avatar_url) {
       setProfileUrl(user.user_metadata.avatar_url);
     }
@@ -31,35 +31,38 @@ export default function ProfilePage() {
       setUploading(true);
 
       const file = e.target.files[0];
-      if (!file) return;
+      if (!file) {
+        toast.error("❌ No file selected!");
+        return;
+      }
 
       const fileExt = file.name.split(".").pop();
       const fileName = `${user.id}.${fileExt}`;
       const filePath = `avatars/${fileName}`;
 
-      // 1. Upload image
+      // Upload
       let { error: uploadError } = await supabase.storage
         .from("avatars")
         .upload(filePath, file, { upsert: true });
 
       if (uploadError) throw uploadError;
 
-      // 2. Get public URL
+      // Get Public URL
       const {
         data: { publicUrl },
       } = supabase.storage.from("avatars").getPublicUrl(filePath);
 
       setProfileUrl(publicUrl);
 
-      // 3. Update user metadata
+      // Update Metadata
       await supabase.auth.updateUser({
         data: { avatar_url: publicUrl },
       });
 
-      alert("Profile updated successfully!");
+      toast.success("🎉 Profile image updated successfully!");
     } catch (error) {
       console.error("Upload error:", error.message);
-      alert("Failed to upload image!");
+      toast.error("❌ Failed to upload image!");
     } finally {
       setUploading(false);
     }
@@ -69,7 +72,6 @@ export default function ProfilePage() {
     <div className="min-h-screen bg-gray-100 flex justify-center px-4 py-10">
       <div className="bg-white shadow-xl rounded-3xl p-8 w-full max-w-md">
 
-        {/* Header */}
         <h1 className="text-2xl font-bold text-gray-800 mb-6 text-center">
           My Profile
         </h1>
@@ -96,6 +98,7 @@ export default function ProfilePage() {
             accept="image/*"
             className="hidden"
             onChange={uploadImage}
+            disabled={uploading}
           />
         </div>
 
@@ -116,11 +119,12 @@ export default function ProfilePage() {
           <button
             onClick={async () => {
               await supabase.auth.signOut();
+              toast.success("✔ You have been signed out");
               window.location.href = "/signin";
             }}
             className="w-full bg-red-600 hover:bg-red-700 text-white py-2 rounded-xl font-medium transition"
           >
-            Logout
+            Sign Out
           </button>
         </div>
       </div>
